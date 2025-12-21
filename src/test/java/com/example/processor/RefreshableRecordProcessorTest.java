@@ -139,7 +139,7 @@ class RefreshableRecordProcessorTest {
         assertThat(compilation)
                 .generatedSourceFile("com.example.test.RefreshableEmptyConfig");
     }
-    
+
     @Test
     void shouldGenerateWrapperForNestedRecord() {
         JavaFileObject testRecord = JavaFileObjects.forSourceString(
