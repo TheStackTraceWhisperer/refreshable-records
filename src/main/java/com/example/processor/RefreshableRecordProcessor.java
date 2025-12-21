@@ -4,16 +4,15 @@ import com.example.annotation.RefreshableRecord;
 import com.squareup.javapoet.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
-import javax.lang.model.element.*;
-import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.*;
+import javax.tools.Diagnostic;
 
 @SupportedAnnotationTypes("com.example.annotation.RefreshableRecord")
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
