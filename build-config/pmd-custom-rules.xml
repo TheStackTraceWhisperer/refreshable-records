@@ -27,5 +27,4 @@
     
     <!-- Code Style -->
     <rule ref="category/java/codestyle.xml/UnnecessaryImport"/>
-    <rule ref="category/java/codestyle.xml/DuplicateImports"/>
 </ruleset>

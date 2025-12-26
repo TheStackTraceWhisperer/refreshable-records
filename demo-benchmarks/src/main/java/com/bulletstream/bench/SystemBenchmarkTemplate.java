@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Fork(value = 1, jvmArgsAppend = {"--enable-preview", "-Xmx4G", "-Xms4G"})
+@Fork(value = 1, jvmArgsAppend = {"-Xmx4G", "-Xms4G"})
 public class SystemBenchmarkTemplate {
 
     // 1. Setup Data (Off-Clock)
