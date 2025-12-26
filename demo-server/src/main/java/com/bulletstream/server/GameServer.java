@@ -24,21 +24,21 @@ public final class GameServer {
         running = true;
         log.info("Game server starting at {} ticks/sec", tickRate);
         
-        // Placeholder game loop
-        long targetFrameTime = 1000 / tickRate;
+        // Placeholder game loop using nanoTime for precise timing
+        long targetFrameTimeNanos = 1_000_000_000L / tickRate;
         
         while (running) {
-            long frameStart = System.currentTimeMillis();
+            long frameStart = System.nanoTime();
             
             // Update game state
             world.update(1.0f / tickRate);
             
             // Sleep to maintain tick rate
-            long elapsed = System.currentTimeMillis() - frameStart;
-            long sleepTime = targetFrameTime - elapsed;
-            if (sleepTime > 0) {
+            long elapsed = System.nanoTime() - frameStart;
+            long sleepTimeNanos = targetFrameTimeNanos - elapsed;
+            if (sleepTimeNanos > 0) {
                 try {
-                    Thread.sleep(sleepTime);
+                    Thread.sleep(sleepTimeNanos / 1_000_000, (int)(sleepTimeNanos % 1_000_000));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
