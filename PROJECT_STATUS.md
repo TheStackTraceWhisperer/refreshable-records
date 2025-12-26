@@ -141,7 +141,7 @@ The repository is fully initialized and ready for development. Recommended next 
 
 ## Technical Stack
 
-- **Java**: 17 (Java 25 ready when available)
+- **Java**: 25 (Early Access with Preview Features)
 - **Build**: Maven 3.9+
 - **Networking**: Netty 4.1
 - **Serialization**: Fury 0.4.1

@@ -153,15 +153,17 @@ The project is now ready for Phase 1 Implementation:
 ## Important Notes
 
 ### Java Version
-The project is configured for **Java 25 (Early Access)** with preview features enabled. However, it currently builds successfully with **Java 17+** which makes it compatible with standard CI environments.
+The project is configured for **Java 25 (Early Access)** with preview features enabled.
 
-To use Java 25 when available:
+**Requirements:**
 1. Install JDK 25-ea from https://jdk.java.net/25/
 2. Configure your IDE to use Java 25 with preview features
-3. The pom.xml is already configured correctly
+3. The pom.xml is configured with `--enable-preview` flags
+
+**Note:** The build requires Java 25-ea. The GitHub Actions CI workflow is configured to use Java 25-ea automatically.
 
 ### ErrorProne
-ErrorProne is configured but currently disabled due to Java 17 compatibility issues. It will work correctly with Java 25-ea.
+ErrorProne is configured and will work with Java 25-ea.
 
 ### Running the Project
 
