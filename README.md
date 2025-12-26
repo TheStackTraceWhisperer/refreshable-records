@@ -1,280 +1,164 @@
-# refreshable-records
+# BulletStream
 
-Here is the complete implementation of the Annotation Processor for Refreshable Records using Spring Boot 3.x, Spring Cloud, and JavaPoet. This implementation generates a @ConfigurationProperties wrapper instead of using manual binding.
-Project Structure Overview
- * pom.xml: Dependencies for Spring Boot, Cloud, and JavaPoet.
- * RefreshableRecord.java: The marker annotation.
- * RefreshableRecordProcessor.java: The compiler-time generator.
- * SPI File: Registers the processor.
- * Usage Examples: A sample record and application config.
-1. Build Configuration
-File: pom.xml
-Ensure you have the Spring Cloud BOM (Bill of Materials) configured so versions match your Spring Boot version.
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+A high-performance, data-oriented Entity Component System (ECS) game server built with Java 25.
 
-    <groupId>com.example</groupId>
-    <artifactId>refreshable-records</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+## Overview
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version> </parent>
+BulletStream is an industrial-grade game server implementation featuring:
+- **Data-Oriented Design**: ECS architecture using primitive arrays for zero-allocation updates
+- **High-Performance Networking**: Netty 4.1 with NIO/Epoll and Fury serialization
+- **Strict Quality Enforcement**: ErrorProne, PMD, SpotBugs, and ForbiddenAPIs
+- **Modern Java**: Java 25 (Early Access) with preview features enabled
 
-    <properties>
-        <java.version>17</java.version>
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
-    </properties>
+## Project Structure
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
+```
+bulletstream/
+├── build-config/              # Shared enforcement configuration
+│   ├── signatures.txt         # Banned API signatures
+│   └── pmd-custom-rules.xml   # Complexity & performance rules
+├── demo-core/                 # Shared math & data structures
+├── demo-server/               # Authoritative game logic
+├── demo-fx-client/            # JavaFX visual debugger
+├── demo-bot-client/           # Headless stress testing
+├── demo-benchmarks/           # JMH performance tests
+└── pom.xml                    # Root build configuration
+```
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-context</artifactId>
-        </dependency>
+## Modules
 
-        <dependency>
-            <groupId>com.squareup</groupId>
-            <artifactId>javapoet</artifactId>
-            <version>1.13.0</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
+| Module | Description | Key Dependencies |
+|--------|-------------|------------------|
+| **demo-core** | Physics engine, GameWorld (int[] arrays), and packet definitions | fury-core, jctools-core |
+| **demo-server** | Netty bootstrapper and authoritative game loop | netty-all, demo-core |
+| **demo-fx-client** | Visual debugger rendering game state to Canvas | javafx-controls, demo-core |
+| **demo-bot-client** | Headless stress tester spawning virtual threads | demo-core |
+| **demo-benchmarks** | JMH performance tests | jmh-core, demo-core |
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+## Requirements
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+- **JDK 25 (Early Access)**: Download from [OpenJDK](https://jdk.java.net/25/)
+- **Maven 3.9+**: Required for multi-module build
+- **IDE Support**: Configure for Java 25 preview features
 
-2. The Annotation
-File: src/main/java/com/example/annotation/RefreshableRecord.java
-package com.example.annotation;
+## Build & Run
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+### Build the project
+```bash
+mvn clean install
+```
 
-/**
- * Marks a Record to have a Refreshable ConfigurationProperties wrapper generated.
- */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE)
-public @interface RefreshableRecord {
-    /**
-     * The property prefix to bind to (e.g., "app.feature").
-     */
-    String prefix();
+### Run verification (includes static analysis)
+```bash
+mvn clean verify
+```
+
+### Run the server
+```bash
+java --enable-preview -jar demo-server/target/demo-server-1.0.0-SNAPSHOT.jar
+```
+
+### Run benchmarks
+```bash
+java -jar demo-benchmarks/target/benchmarks.jar
+```
+
+## Quality Enforcement
+
+The build enforces strict quality standards:
+
+### Forbidden APIs
+Banned APIs include:
+- `System.out` / `System.err` (use SLF4J)
+- `printStackTrace()` (use logging)
+- Legacy collections: `Hashtable`, `Vector`
+- Legacy date/time: `Date`, `Calendar`
+
+### PMD Rules
+- **Cyclomatic Complexity**: Maximum 10 per method
+- **Performance**: No object allocation in loops
+- **Best Practices**: No unused variables, imports, or methods
+
+### Error Prone
+Catches common Java mistakes at compile time with enhanced static analysis.
+
+### SpotBugs
+Detects bugs, security vulnerabilities, and code smells.
+
+## Design Principles
+
+### Zero-Allocation Game Loop
+The core game loop uses primitive arrays and avoids object allocation:
+```java
+// Data-Oriented: Arrays of primitives
+float[] positionsX = new float[1000];
+float[] positionsY = new float[1000];
+
+// Zero-allocation update
+for (int i = 0; i < entityCount; i++) {
+    positionsX[i] += velocitiesX[i] * deltaTime;
 }
+```
 
-3. The Annotation Processor
-File: src/main/java/com/example/processor/RefreshableRecordProcessor.java
-This processor inspects the Record fields and generates a mirrored class with @ConfigurationProperties, @RefreshScope, and a conversion method.
-package com.example.processor;
+### Single-Threaded Server
+The authoritative server runs on a single thread to avoid synchronization overhead.
 
-import com.example.annotation.RefreshableRecord;
-import com.squareup.javapoet.*;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
+### Lock-Free Client Communication
+Uses JCTools for lock-free queues in high-throughput scenarios.
 
-import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
-import javax.lang.model.element.*;
-import javax.tools.Diagnostic;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+## Testing
 
-@SupportedAnnotationTypes("com.example.annotation.RefreshableRecord")
-@SupportedSourceVersion(SourceVersion.RELEASE_17)
-public class RefreshableRecordProcessor extends AbstractProcessor {
+### Unit Tests
+```bash
+mvn test
+```
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(RefreshableRecord.class)) {
-            if (element.getKind() == ElementKind.RECORD) {
-                generateRefreshableWrapper((TypeElement) element);
-            } else {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        "@RefreshableRecord must be used on a Java Record", element);
-            }
-        }
-        return true;
-    }
+### Architecture Tests
+Uses ArchUnit to enforce architectural constraints:
+- No circular dependencies
+- Proper layer separation
+- Dependency rules
 
-    private void generateRefreshableWrapper(TypeElement recordElement) {
-        String packageName = processingEnv.getElementUtils().getPackageOf(recordElement).getQualifiedName().toString();
-        String recordSimpleName = recordElement.getSimpleName().toString();
-        String wrapperName = "Refreshable" + recordSimpleName;
-        String prefix = recordElement.getAnnotation(RefreshableRecord.class).prefix();
+### Performance Tests
+JMH benchmarks measure:
+- GameWorld update throughput
+- Serialization performance
+- Network packet processing
 
-        ClassName recordType = ClassName.get(packageName, recordSimpleName);
+## CI/CD
 
-        // 1. Prepare Constructor and Fields
-        MethodSpec.Builder constructor = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC);
+GitHub Actions workflow automatically:
+1. Builds with Java 25-EA
+2. Runs all tests
+3. Executes static analysis (PMD, SpotBugs, ForbiddenAPIs)
+4. Uploads artifacts and reports
 
-        List<FieldSpec> fields = new ArrayList<>();
-        
-        // Prepare return statement for current() method: return new RecordType(arg1, arg2...)
-        StringBuilder returnStmt = new StringBuilder("return new $T(");
-        List<Object> returnArgs = new ArrayList<>();
-        returnArgs.add(recordType);
+## Development
 
-        // 2. Iterate over Record Components
-        List<? extends Element> enclosedElements = recordElement.getEnclosedElements();
-        
-        // Filter specifically for Record Components to match the canonical constructor
-        List<VariableElement> recordComponents = enclosedElements.stream()
-                .filter(e -> e.getKind() == ElementKind.RECORD_COMPONENT)
-                .map(e -> (VariableElement) e)
-                .toList();
+### Adding a New Module
+1. Create module directory
+2. Add `pom.xml` with parent reference
+3. Add module to root `pom.xml` `<modules>` section
+4. Implement with strict adherence to quality rules
 
-        for (int i = 0; i < recordComponents.size(); i++) {
-            VariableElement component = recordComponents.get(i);
-            String name = component.getSimpleName().toString();
-            TypeName type = TypeName.get(component.asType());
+### Troubleshooting Build Failures
 
-            // Field
-            fields.add(FieldSpec.builder(type, name, Modifier.PRIVATE, Modifier.FINAL).build());
+**Forbidden API violation:**
+```
+[ForbiddenAPIs] ... System.out is forbidden
+```
+Solution: Replace with SLF4J logging
 
-            // Constructor Param
-            constructor.addParameter(type, name);
-            // Constructor Assignment
-            constructor.addStatement("this.$N = $N", name, name);
+**PMD Complexity violation:**
+```
+PMD Violation: Cyclomatic Complexity
+```
+Solution: Refactor method to reduce complexity below 10
 
-            // Return statement builder
-            returnStmt.append("$N");
-            returnArgs.add(name);
-            if (i < recordComponents.size() - 1) {
-                returnStmt.append(", ");
-            }
-        }
-        returnStmt.append(")");
+## License
 
-        // 3. Create conversion method
-        MethodSpec currentMethod = MethodSpec.methodBuilder("current")
-                .addModifiers(Modifier.PUBLIC)
-                .returns(recordType)
-                .addStatement(returnStmt.toString(), returnArgs.toArray())
-                .build();
+[Add your license here]
 
-        // 4. Build Class
-        TypeSpec classSpec = TypeSpec.classBuilder(wrapperName)
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Component.class) // Make it discoverable
-                .addAnnotation(RefreshScope.class) // Make it refreshable
-                .addAnnotation(AnnotationSpec.builder(ConfigurationProperties.class)
-                        .addMember("prefix", "$S", prefix)
-                        .build())
-                .addFields(fields)
-                .addMethod(constructor.build())
-                .addMethod(currentMethod)
-                .addJavadoc("Generated Refreshable Wrapper for {@link $T}.\n", recordType)
-                .build();
+## Contributing
 
-        // 5. Write File
-        JavaFile javaFile = JavaFile.builder(packageName, classSpec)
-                .indent("    ")
-                .build();
-
-        try {
-            javaFile.writeTo(processingEnv.getFiler());
-        } catch (IOException e) {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, 
-                    "Failed to generate wrapper: " + e.getMessage());
-        }
-    }
-}
-
-4. Processor Registration (SPI)
-File: src/main/resources/META-INF/services/javax.annotation.processing.Processor
-This file tells the Java compiler to use your processor.
-com.example.processor.RefreshableRecordProcessor
-
-5. Example Usage
-File: src/main/resources/application.properties
-# Management endpoints to expose /actuator/refresh
-management.endpoints.web.exposure.include=refresh
-
-# Example configuration
-app.config.max-retries=5
-app.config.api-url=https://initial-url.com
-
-File: src/main/java/com/example/config/MyConfigRecord.java
-package com.example.config;
-
-import com.example.annotation.RefreshableRecord;
-
-@RefreshableRecord(prefix = "app.config")
-public record MyConfigRecord(
-    String apiUrl, 
-    int maxRetries
-) {}
-
-File: src/main/java/com/example/service/MyService.java
-Notice that we inject the generated class (RefreshableMyConfigRecord), not the record itself.
-package com.example.service;
-
-import com.example.config.MyConfigRecord;
-import com.example.config.RefreshableMyConfigRecord; // This is generated
-import org.springframework.stereotype.Service;
-
-@Service
-public class MyService {
-
-    private final RefreshableMyConfigRecord properties;
-
-    public MyService(RefreshableMyConfigRecord properties) {
-        this.properties = properties;
-    }
-
-    public void performAction() {
-        // Calling .current() fetches the specific immutable Record instance
-        // representing the state of configuration at this exact moment.
-        MyConfigRecord currentConfig = properties.current();
-        
-        System.out.println("Connecting to: " + currentConfig.apiUrl());
-        System.out.println("Max Retries: " + currentConfig.maxRetries());
-    }
-}
-
+[Add contribution guidelines here]

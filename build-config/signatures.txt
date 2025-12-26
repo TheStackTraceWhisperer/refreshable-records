@@ -1,0 +1,13 @@
+# Ban console spam (Use SLF4J)
+java.lang.System#out
+java.lang.System#err
+java.lang.Throwable#printStackTrace()
+
+# Ban slow synchronization & legacy time
+java.util.Hashtable
+java.util.Vector
+java.util.Date
+java.util.Calendar
+
+# Ban allocation-heavy streams in hot paths (Optional strictness)
+# java.util.stream.Stream
