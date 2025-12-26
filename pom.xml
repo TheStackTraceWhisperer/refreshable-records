@@ -14,9 +14,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- NOTE: Java 25 is required for production use. Temporarily set to 17 for CI compatibility -->
-        <java.version>25</java.version>
-        <maven.compiler.release>25</maven.compiler.release>
+        <!-- Target Java 25 for production, but allow override for CI -->
+        <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release>
         
         <!-- Core Dependencies -->
         <netty.version>4.1.100.Final</netty.version>
@@ -145,7 +145,8 @@
                     <configuration>
                         <release>${maven.compiler.release}</release>
                         <compilerArgs>
-                            <arg>--enable-preview</arg>
+                            <!-- Enable preview when using Java 25 -->
+                            <!-- <arg>-\-enable-preview</arg> -->
                             <arg>-Xlint:all</arg>
                         </compilerArgs>
                     </configuration>
@@ -157,7 +158,8 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.2.5</version>
                     <configuration>
-                        <argLine>--enable-preview</argLine>
+                        <!-- Enable preview when using Java 25 -->
+                        <!-- <argLine>-\-enable-preview</argLine> -->
                     </configuration>
                 </plugin>
 
@@ -172,7 +174,7 @@
                         <rulesets>
                             <ruleset>${maven.multiModuleProjectDirectory}/build-config/pmd-custom-rules.xml</ruleset>
                         </rulesets>
-                        <targetJdk>22</targetJdk>
+                        <targetJdk>17</targetJdk>
                     </configuration>
                     <executions>
                         <execution>
