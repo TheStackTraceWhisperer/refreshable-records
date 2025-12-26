@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: read
       actions: read
+      checks: write
+      pull-requests: write
     
     steps:
     - name: Checkout code
@@ -28,6 +30,16 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean verify
       
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          **/target/surefire-reports/TEST-*.xml
+        check_name: Test Results
+        comment_title: Test Results
+        fail_on: nothing
+        
     - name: Upload Test Reports
       if: always()
       uses: actions/upload-artifact@v4
@@ -36,6 +48,7 @@ jobs:
         path: |
           **/target/surefire-reports/
           **/target/pmd.xml
+          **/target/spotbugs.xml
         retention-days: 7
     
     - name: Upload Build Artifacts
@@ -46,3 +59,9 @@ jobs:
         path: |
           **/target/*.jar
         retention-days: 7
+        
+    - name: Comment PMD Results
+      if: always()
+      uses: jwgmeligmeyling/pmd-github-action@master
+      with:
+        path: '**/target/pmd.xml'
