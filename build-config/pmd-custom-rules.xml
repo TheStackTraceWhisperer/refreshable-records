@@ -11,7 +11,6 @@
         <properties>
             <property name="classReportLevel" value="80"/>
             <property name="methodReportLevel" value="10"/>
-            <property name="cycloMaticComplexity" value="10"/>
         </properties>
     </rule>
     

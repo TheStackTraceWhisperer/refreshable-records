@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude JMH generated code -->
+    <Match>
+        <Package name="~.*\.jmh_generated.*"/>
+    </Match>
+    
+    <!-- Exclude false positives in benchmark classes -->
+    <Match>
+        <Class name="~.*Benchmark"/>
+        <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
+    </Match>
+</FindBugsFilter>

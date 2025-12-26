@@ -11,7 +11,6 @@ public final class GameWorld {
     private static final Logger log = LoggerFactory.getLogger(GameWorld.class);
 
     // Entity Component Arrays
-    private final int[] entityIds;
     private final float[] positionsX;
     private final float[] positionsY;
     private final float[] velocitiesX;
@@ -22,7 +21,6 @@ public final class GameWorld {
 
     public GameWorld(int maxEntities) {
         this.maxEntities = maxEntities;
-        this.entityIds = new int[maxEntities];
         this.positionsX = new float[maxEntities];
         this.positionsY = new float[maxEntities];
         this.velocitiesX = new float[maxEntities];
@@ -42,7 +40,6 @@ public final class GameWorld {
         }
         
         int index = entityCount++;
-        entityIds[index] = index;
         positionsX[index] = x;
         positionsY[index] = y;
         velocitiesX[index] = vx;

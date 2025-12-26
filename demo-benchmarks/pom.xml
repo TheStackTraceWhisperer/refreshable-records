@@ -34,6 +34,26 @@
 
     <build>
         <plugins>
+            <!-- Exclude JMH generated code from PMD -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/jmh_generated/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Exclude JMH generated code from SpotBugs -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <excludeFilterFile>${maven.multiModuleProjectDirectory}/build-config/spotbugs-exclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
