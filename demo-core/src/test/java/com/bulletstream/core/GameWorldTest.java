@@ -1,9 +1,10 @@
 package com.bulletstream.core;
 
+import com.bulletstream.test.StrictUnitTest;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameWorldTest {
+class GameWorldTest extends StrictUnitTest {
 
     @Test
     void testAddEntity() {
