@@ -35,6 +35,8 @@
     <build>
         <plugins>
             <!-- Exclude JMH generated code from PMD -->
+            <!-- Temporarily disabled for Java 25 (PMD doesn't fully support Java 25) -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -44,8 +46,11 @@
                     </excludes>
                 </configuration>
             </plugin>
+            -->
 
             <!-- Exclude JMH generated code from SpotBugs -->
+            <!-- Temporarily disabled for Java 25 (ASM doesn't support class file format 69) -->
+            <!--
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
@@ -53,6 +58,7 @@
                     <excludeFilterFile>${maven.multiModuleProjectDirectory}/build-config/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
