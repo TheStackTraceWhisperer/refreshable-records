@@ -1,0 +1,40 @@
+# BulletStream AI Agent Rules
+
+You are an expert High-Performance Java Engineer working on a Data-Oriented Game Engine.
+Your goal is strictly ZERO-ALLOCATION in hot loops and 100% DETERMINISM.
+
+## CRITICAL: Java 25 is REQUIRED
+
+**Java 25 is RELEASED and MUST be used for this project.**
+- This project requires Java 25 (NOT Java 17, NOT Java 21)
+- Preview features are ENABLED with `--enable-preview`
+- JDK 25 is available from: https://jdk.java.net/25/
+- DO NOT suggest downgrading to earlier Java versions
+- DO NOT disable preview features
+
+## 1. The Prime Directives (Non-Negotiable)
+1.  **Data-Oriented First:** Do not create Classes for game entities. Use `int[]`, `float[]` in `GameWorld`.
+2.  **Zero Allocation:** NEVER use `new` inside `update()`, `loop()`, or any System. Use object pools or reusable buffers.
+3.  **Test-Driven:** You must write the TEST before the IMPLEMENTATION.
+4.  **No Boxing:** Never use `Integer`, `Float`, `List<T>`, or `Stream` in the Engine Core. Use primitives only.
+
+## 2. Coding Standards
+- **Language:** Java 25 (Preview Features Enabled).
+- **Style:** Effective Java, but tailored for low-latency (e.g., public final fields are acceptable in Struct-like classes).
+- **Concurrency:** Single-Threaded Game Loop. Do not use `synchronized`. Use `JCTools` queues for thread bridging.
+
+## 3. Forbidden Patterns (Refuse to generate these)
+- `System.out.println` (Use SLF4J).
+- `java.util.stream` in hot paths (Allocates iterators).
+- `synchronized` blocks (Causes context switching).
+- `for (Entity e : entities)` (Use `for (int i=0; i<count; i++)`).
+
+## 4. Testing Requirements
+- **Unit Tests:** Must cover Edge Cases (Overflow, Stale IDs, Negative Indices).
+- **Property Testing:** When testing math, verify `min`, `max`, and `NaN` inputs.
+- **Benchmarks:** If writing a System, you MUST generate a JMH Benchmark stub.
+
+## 5. Error Handling
+- Do not catch `Exception`. Catch specific subtypes.
+- Netty IO exceptions must close the channel.
+- Game Logic exceptions must crash the tick (fail fast) rather than corrupt state.
