@@ -14,9 +14,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Java 25 (Released) - REQUIRED (Building with Java 17 until Java 25 is available in CI) -->
-        <java.version>17</java.version>
-        <maven.compiler.release>17</maven.compiler.release>
+        <!-- Java 25 (Released) - REQUIRED -->
+        <java.version>25</java.version>
+        <maven.compiler.release>25</maven.compiler.release>
         
         <!-- Core Dependencies -->
         <netty.version>4.1.115.Final</netty.version>
@@ -145,8 +145,8 @@
                     <configuration>
                         <release>${maven.compiler.release}</release>
                         <compilerArgs>
-                            <!-- Preview features for Java 25 - currently disabled for Java 17 compatibility -->
-                            <!-- <arg>-\-enable-preview</arg> -->
+                            <!-- Preview features for Java 25 -->
+                            <arg>--enable-preview</arg>
                             <arg>-Xlint:all</arg>
                         </compilerArgs>
                     </configuration>
@@ -158,8 +158,8 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.5.2</version>
                     <configuration>
-                        <!-- Preview features for Java 25 - currently disabled for Java 17 compatibility -->
-                        <!-- <argLine>-\-enable-preview</argLine> -->
+                        <!-- Preview features for Java 25 -->
+                        <argLine>--enable-preview</argLine>
                     </configuration>
                 </plugin>
 
@@ -186,7 +186,7 @@
                         <rulesets>
                             <ruleset>${maven.multiModuleProjectDirectory}/build-config/pmd-custom-rules.xml</ruleset>
                         </rulesets>
-                        <targetJdk>17</targetJdk>
+                        <targetJdk>25</targetJdk>
                     </configuration>
                     <executions>
                         <execution>
