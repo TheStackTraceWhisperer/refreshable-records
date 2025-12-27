@@ -155,6 +155,7 @@
                             <!-- Preview features for Java 25 -->
                             <arg>--enable-preview</arg>
                             <arg>-Xlint:all</arg>
+                            <arg>--add-modules=jdk.incubator.vector</arg>
                         </compilerArgs>
                     </configuration>
                 </plugin>
@@ -165,8 +166,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.5.2</version>
                     <configuration>
-                        <!-- Preview features for Java 25 -->
-                        <argLine>--enable-preview</argLine>
+                        <argLine>--enable-preview --add-modules=jdk.incubator.vector</argLine>
                     </configuration>
                 </plugin>
 
