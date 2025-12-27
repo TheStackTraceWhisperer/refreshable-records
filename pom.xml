@@ -148,6 +148,7 @@
                             <!-- Preview features for Java 25 - currently disabled for Java 17 compatibility -->
                             <!-- <arg>-\-enable-preview</arg> -->
                             <arg>-Xlint:all</arg>
+                            <arg>--add-modules=jdk.incubator.vector</arg>
                         </compilerArgs>
                     </configuration>
                 </plugin>
@@ -160,6 +161,7 @@
                     <configuration>
                         <!-- Preview features for Java 25 - currently disabled for Java 17 compatibility -->
                         <!-- <argLine>-\-enable-preview</argLine> -->
+                        <argLine>--add-modules=jdk.incubator.vector</argLine>
                     </configuration>
                 </plugin>
 
