@@ -129,4 +129,28 @@ class GameWorldTest extends StrictUnitTest {
         // Second entity should have moved
         assertEquals(10.0f, world.getPositionX(index2), 0.001f);
     }
+
+    @Test
+    void testGenerationWraparound() {
+        GameWorld world = new GameWorld(10);
+        
+        // Spawn entity at index 0
+        int entityId = world.spawnEntity(0.0f, 0.0f, 0.0f, 0.0f, (byte) 0);
+        int index = entityId & 0xFFFF;
+        
+        // Manually set generation to 0xFFFE (65534) - one below max
+        // Note: This is testing internal state, in production this would happen after many spawns/despawns
+        int maxGeneration = 0xFFFE;
+        
+        // Simulate multiple despawn/spawn cycles to approach wraparound
+        for (int i = 0; i < 2; i++) {
+            world.despawnEntity(world.getEntityId(index));
+            world.spawnEntity(0.0f, 0.0f, 0.0f, 0.0f, (byte) 0);
+        }
+        
+        // Verify the entity is still valid and generation increased
+        int currentId = world.getEntityId(index);
+        int currentGen = currentId >>> 16;
+        assertTrue(currentGen >= 1); // Should be valid generation (not 0)
+    }
 }

@@ -61,7 +61,7 @@ public final class GameWorld {
             index = freeIndices.pop();
             // Increment generation to invalidate stale references
             int generation = (entityIds[index] >>> 16) + 1;
-            if (generation > 0xFFFF) {
+            if (generation >= 0xFFFF) {
                 generation = 1; // Wrap around (skip 0)
             }
             entityIds[index] = (generation << 16) | index;
@@ -95,8 +95,8 @@ public final class GameWorld {
     public void despawnEntity(int entityId) {
         int index = entityId & 0xFFFF;
         
-        // Validate index range
-        if (index < 0 || index >= entityCount) {
+        // Validate index range (against maxEntities to account for recycled indices)
+        if (index < 0 || index >= maxEntities) {
             throw new IllegalArgumentException("Invalid entity index: " + index);
         }
         

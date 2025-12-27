@@ -145,12 +145,12 @@ Update demo-core tests to enforce the new specs.
 
 ## 6. Implementation Checklist
 
-- [ ] Update pom.xml to Java 25.
-- [ ] Implement GameWorld arrays (Flags, Owner, GenID).
-- [ ] Implement SpatialHash.
-- [ ] Create Packet classes in demo-core.
-- [ ] Refactor GameServer loop to use Accumulator.
-- [ ] Run `mvn verify` to ensure 0 allocations in hot paths.
+- [x] Update pom.xml to Java 25.
+- [x] Implement GameWorld arrays (Flags, Owner, GenID).
+- [x] Implement SpatialHash.
+- [x] Create Packet classes in demo-core.
+- [x] Refactor GameServer loop to use Accumulator.
+- [x] Run `mvn verify` to ensure 0 allocations in hot paths.
 
 ---
 

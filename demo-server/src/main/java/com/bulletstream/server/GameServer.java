@@ -27,30 +27,34 @@ public final class GameServer {
         running = true;
         log.info("Game server starting at {} ticks/sec", tickRate);
         
-        // Fixed-step accumulator loop
-        double t = 0.0;
-        double dt = 1.0 / tickRate;
-        double currentTime = System.nanoTime() / 1_000_000_000.0; // Convert to seconds
-        double accumulator = 0.0;
+        // Fixed-step accumulator loop (using nanoseconds for precision)
+        long t = 0L;
+        long dtNanos = 1_000_000_000L / tickRate; // Nanoseconds per tick
+        long currentTimeNanos = System.nanoTime();
+        long accumulatorNanos = 0L;
+        
+        // Maximum frame time cap (0.25 seconds in nanoseconds)
+        final long maxFrameTimeNanos = 250_000_000L;
         
         while (running) {
-            double newTime = System.nanoTime() / 1_000_000_000.0;
-            double frameTime = newTime - currentTime;
-            currentTime = newTime;
+            long newTimeNanos = System.nanoTime();
+            long frameTimeNanos = newTimeNanos - currentTimeNanos;
+            currentTimeNanos = newTimeNanos;
             
             // Cap maximum frame time to prevent spiral of death
-            if (frameTime > 0.25) {
-                frameTime = 0.25;
+            if (frameTimeNanos > maxFrameTimeNanos) {
+                frameTimeNanos = maxFrameTimeNanos;
             }
             
-            accumulator += frameTime;
+            accumulatorNanos += frameTimeNanos;
             
-            while (accumulator >= dt) {
+            while (accumulatorNanos >= dtNanos) {
                 // 1. Drain Network Queue (JCTools) -> Apply Inputs
                 // TODO: Process input queue
                 
                 // 2. Physics Step (GameWorld.update)
-                world.update((float) dt);
+                float dtSeconds = dtNanos / 1_000_000_000.0f;
+                world.update(dtSeconds);
                 
                 // 3. Collision Step (SpatialHash)
                 // TODO: Implement collision detection
@@ -58,12 +62,12 @@ public final class GameServer {
                 // 4. Pack & Broadcast State (if tick % sendRate == 0)
                 // TODO: Broadcast state to clients
                 
-                t += dt;
-                accumulator -= dt;
+                t += dtNanos;
+                accumulatorNanos -= dtNanos;
                 currentTick++;
                 
                 if (currentTick % (tickRate * 10) == 0) {
-                    log.debug("Server tick: {} (t={})", currentTick, t);
+                    log.debug("Server tick: {} (t={}s)", currentTick, t / 1_000_000_000.0);
                 }
             }
             
