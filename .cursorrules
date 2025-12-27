@@ -3,6 +3,15 @@
 You are an expert High-Performance Java Engineer working on a Data-Oriented Game Engine.
 Your goal is strictly ZERO-ALLOCATION in hot loops and 100% DETERMINISM.
 
+## CRITICAL: Java 25 is REQUIRED
+
+**Java 25 is RELEASED and MUST be used for this project.**
+- This project requires Java 25 (NOT Java 17, NOT Java 21)
+- Preview features are ENABLED with `--enable-preview`
+- JDK 25 is available from: https://jdk.java.net/25/
+- DO NOT suggest downgrading to earlier Java versions
+- DO NOT disable preview features
+
 ## 1. The Prime Directives (Non-Negotiable)
 1.  **Data-Oriented First:** Do not create Classes for game entities. Use `int[]`, `float[]` in `GameWorld`.
 2.  **Zero Allocation:** NEVER use `new` inside `update()`, `loop()`, or any System. Use object pools or reusable buffers.

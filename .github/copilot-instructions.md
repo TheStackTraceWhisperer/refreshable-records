@@ -2,6 +2,16 @@
 
 You are working on BulletStream, a high-performance data-oriented ECS game server. Follow these instructions strictly.
 
+## CRITICAL: Java Version Requirement
+
+**Java 25 is RELEASED and REQUIRED for this project.**
+- This project MUST use Java 25 (not Java 17, not Java 21, not any earlier version)
+- Preview features are ENABLED with `--enable-preview`
+- The JDK 25 is available and should be installed from: https://jdk.java.net/25/
+- All code must compile and run with Java 25
+- DO NOT suggest downgrading to earlier Java versions
+- DO NOT disable preview features
+
 ## Core Principles
 
 ### 1. Data-Oriented Design
