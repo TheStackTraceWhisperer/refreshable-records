@@ -189,8 +189,8 @@ class VectorOpsTest extends StrictUnitTest {
     
     @Test
     void testLargeArray() {
-        // Test with larger array (1000 elements)
-        int count = 1000;
+        // Test with larger array to verify SIMD loop handles multiple vector chunks
+        final int count = 1000;
         float[] pos = new float[count];
         float[] vel = new float[count];
         

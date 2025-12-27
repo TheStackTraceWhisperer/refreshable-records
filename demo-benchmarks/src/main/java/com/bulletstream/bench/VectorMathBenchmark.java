@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
+// Fork=1 for faster CI execution; use fork=3+ for production benchmarks
 @Fork(value = 1, jvmArgsAppend = {"-Xmx4G", "-Xms4G", "--add-modules=jdk.incubator.vector"})
 @Warmup(iterations = 3, time = 1)
 @Measurement(iterations = 5, time = 1)

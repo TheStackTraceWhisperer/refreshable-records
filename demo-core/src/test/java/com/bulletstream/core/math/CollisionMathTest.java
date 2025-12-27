@@ -122,8 +122,8 @@ class CollisionMathTest extends StrictUnitTest {
     
     @Test
     void testCountCollisionsLargeArray() {
-        // Test with 1000 elements
-        int count = 1000;
+        // Test with larger array to verify vectorized collision detection
+        final int count = 1000;
         float[] px = new float[count];
         float[] py = new float[count];
         float[] cx = new float[count];
